@@ -14,6 +14,8 @@ public class City implements Serializable {
         this.name = name;
     }
 
+    public City(){};
+
     public String getName() {
         return name;
     }

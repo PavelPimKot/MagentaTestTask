@@ -7,6 +7,7 @@ public class Latitude implements Serializable {
     public Latitude( double latitudeValue){
         this.latitudeValue = latitudeValue;
     }
+    public Latitude(){};
 
     public double getLatitudeValue() {
         return latitudeValue;

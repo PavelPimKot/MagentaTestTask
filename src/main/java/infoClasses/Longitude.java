@@ -9,6 +9,7 @@ public class Longitude implements Serializable {
         this.longitudeValue = longitudeValue;
     }
 
+    public Longitude() {};
     public double getLongitudeValue() {
         return longitudeValue;
     }
