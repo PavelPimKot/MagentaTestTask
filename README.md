@@ -1,2 +1,0 @@
-# MagentaTestTask
-test-distance-calculator
