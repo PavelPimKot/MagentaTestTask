@@ -16,7 +16,7 @@ public class Distance implements Serializable {
         this.distance = distance;
     }
 
-    public Distance(){};
+    public Distance(){}
 
     public static Distance getDistanceBetweenStraight(City fromCity, City toCity){
         double dLat = Math.toRadians(toCity.getLatitude().getLatitudeValue()-fromCity.getLatitude().getLatitudeValue());

@@ -9,7 +9,7 @@ public class Latitude implements Serializable {
     public Latitude( double latitudeValue) throws LatitudeMeasureException {
         setLatitudeValue(latitudeValue);
     }
-    public Latitude(){};
+    public Latitude(){}
 
     public double getLatitudeValue() {
         return latitudeValue;

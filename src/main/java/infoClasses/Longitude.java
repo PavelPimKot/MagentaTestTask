@@ -11,7 +11,7 @@ public class Longitude implements Serializable {
         setLongitudeValue(longitudeValue);
     }
 
-    public Longitude() {};
+    public Longitude() {}
 
     public double getLongitudeValue() {
         return longitudeValue;
