@@ -19,11 +19,11 @@ public class Distance implements Serializable {
     public Distance(){}
 
     public static Distance getDistanceBetweenStraight(City fromCity, City toCity){
-        double dLat = Math.toRadians(toCity.getLatitude().getLatitudeValue()-fromCity.getLatitude().getLatitudeValue());
-        double dLng = Math.toRadians(toCity.getLongitude().getLongitudeValue()-fromCity.getLongitude().getLongitudeValue());
+        double dLat = Math.toRadians(toCity.getLatitude()-fromCity.getLatitude());
+        double dLng = Math.toRadians(toCity.getLongitude()-fromCity.getLongitude());
         double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(Math.toRadians(fromCity.getLatitude().getLatitudeValue())) *
-                        Math.cos(Math.toRadians(toCity.getLatitude().getLatitudeValue())) *
+                Math.cos(Math.toRadians(fromCity.getLatitude())) *
+                        Math.cos(Math.toRadians(toCity.getLatitude())) *
                         Math.sin(dLng/2) * Math.sin(dLng/2);
         double distance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         distance *= EARTH_RAD;

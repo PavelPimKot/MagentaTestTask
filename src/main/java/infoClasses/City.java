@@ -1,16 +1,19 @@
 package infoClasses;
 
+import exceptionClasses.LatitudeMeasureException;
+import exceptionClasses.LongitudeMeasureException;
+
 import java.io.Serializable;
 
 public class City implements Serializable {
 
     private String name;
-    private Latitude latitude;
-    private Longitude longitude;
+    private double latitude;
+    private double longitude;
 
-    public City( String name ,Latitude latitude,Longitude longitude){
-        this.latitude  = latitude;
-        this.longitude = longitude;
+    public City( String name ,double latitude,double longitude) throws LatitudeMeasureException, LongitudeMeasureException {
+        this.setLatitude(latitude);
+        this.setLongitude(longitude);
         this.name = name;
     }
 
@@ -20,11 +23,11 @@ public class City implements Serializable {
         return name;
     }
 
-    public Latitude getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public Longitude getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -32,16 +35,22 @@ public class City implements Serializable {
         this.name = name;
     }
 
-    public void setLatitude(Latitude latitude) {
+    public void setLatitude(double latitude) throws LatitudeMeasureException {
+        if(latitude<-90 || latitude >90){
+            throw  new LatitudeMeasureException();
+        }
         this.latitude = latitude;
     }
 
-    public void setLongitude(Longitude longitude) {
+    public void setLongitude(double longitude) throws LongitudeMeasureException {
+        if( longitude <-180 || longitude > 180){
+            throw new LongitudeMeasureException();
+        }
         this.longitude = longitude;
     }
 
     @Override
     public String toString() {
-        return name+ '('+ latitude.toString() + " , "+longitude.toString()+')';
+        return name+ '(' + " Latitude:"+ latitude + '°'+" , "+" Longitude:"+longitude+'°'+')';
     }
 }
