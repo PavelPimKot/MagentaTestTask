@@ -3,9 +3,18 @@ package infoClasses;
 import exceptionClasses.LatitudeMeasureException;
 import exceptionClasses.LongitudeMeasureException;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+
+@Entity
+@Table(name = "Cities")
 public class City implements Serializable {
+
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
 
     private String name;
     private double latitude;
