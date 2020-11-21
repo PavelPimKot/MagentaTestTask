@@ -14,10 +14,16 @@ public class City implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "latitude")
     private double latitude;
+
+    @Column(name = "longitude")
     private double longitude;
 
     public City( String name ,double latitude,double longitude) throws LatitudeMeasureException, LongitudeMeasureException {

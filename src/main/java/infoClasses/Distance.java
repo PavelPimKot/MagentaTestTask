@@ -9,13 +9,16 @@ public class Distance implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Column(name = "fromCity")
     private City fromCity;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Column(name = "toCity")
     private City toCity;
     private double distance;
     private final static double EARTH_RAD = 6371;//km
