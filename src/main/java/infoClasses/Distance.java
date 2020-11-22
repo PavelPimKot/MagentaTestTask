@@ -13,11 +13,11 @@ public class Distance implements Serializable {
     private Integer id;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "fromCity", nullable = false)
     private City fromCity;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "toCity", nullable = false)
     private City toCity;
 
