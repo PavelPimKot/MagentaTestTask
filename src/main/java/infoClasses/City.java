@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "Cities")
+@Table(name = "cities")
 public class City implements Serializable {
 
 
@@ -17,13 +17,13 @@ public class City implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude",nullable = false)
     private double latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude",nullable = false)
     private double longitude;
 
     public City( String name ,double latitude,double longitude) throws LatitudeMeasureException, LongitudeMeasureException {

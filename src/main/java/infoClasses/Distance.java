@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Distances")
+@Table(name = "distances")
 public class Distance implements Serializable {
 
     @Id
@@ -14,12 +14,14 @@ public class Distance implements Serializable {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Column(name = "fromCity")
+    @Column(name = "fromCity", nullable = false)
     private City fromCity;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Column(name = "toCity")
+    @Column(name = "toCity", nullable = false)
     private City toCity;
+
+    @Column(name = "distance", nullable = false)
     private double distance;
     private final static double EARTH_RAD = 6371;//km
 
