@@ -1,10 +1,10 @@
 alter table distances
-  drop constraint  FROM_CITY
+  drop constraint  fromCity
 
 GO
 
 alter table distances
- drop constraint TO_CITY
+ drop constraint toCity
 
  GO
 

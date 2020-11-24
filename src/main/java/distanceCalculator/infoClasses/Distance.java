@@ -7,17 +7,17 @@ import java.io.Serializable;
 public class Distance implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fromCity", nullable = false)
+    @JoinColumn(name = "from_City", nullable = false, referencedColumnName = "id")
     private City fromCity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "toCity", nullable = false)
+    @JoinColumn(name = "to_City", nullable = false, referencedColumnName = "id")
     private City toCity;
 
     @Column(name = "distance", nullable = false)
