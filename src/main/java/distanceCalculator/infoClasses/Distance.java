@@ -1,5 +1,4 @@
-package infoClasses;
-
+package distanceCalculator.infoClasses;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,11 +13,11 @@ public class Distance implements Serializable {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "fromCity", nullable = false)
+    @JoinColumn(name = "fromCity", nullable = false)
     private City fromCity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "toCity", nullable = false)
+    @JoinColumn(name = "toCity", nullable = false)
     private City toCity;
 
     @Column(name = "distance", nullable = false)

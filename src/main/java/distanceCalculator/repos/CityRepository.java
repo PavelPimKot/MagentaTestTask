@@ -1,6 +1,6 @@
-package repos;
+package distanceCalculator.repos;
 
-import infoClasses.City;
+import distanceCalculator.infoClasses.City;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CityRepository  extends CrudRepository<City, Integer> {

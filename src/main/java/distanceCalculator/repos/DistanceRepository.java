@@ -1,6 +1,6 @@
-package repos;
+package distanceCalculator.repos;
 
-import infoClasses.Distance;
+import distanceCalculator.infoClasses.Distance;
 import org.springframework.data.repository.CrudRepository;
 
 public interface DistanceRepository  extends CrudRepository<Distance, Integer> {

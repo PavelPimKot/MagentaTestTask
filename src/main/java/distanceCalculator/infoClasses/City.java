@@ -1,10 +1,7 @@
-package infoClasses;
-
-import exceptionClasses.LatitudeMeasureException;
-import exceptionClasses.LongitudeMeasureException;
-
+package distanceCalculator.infoClasses;
 import javax.persistence.*;
 import java.io.Serializable;
+import distanceCalculator.exceptionClasses.*;
 
 
 @Entity

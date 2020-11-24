@@ -1,4 +1,4 @@
-package exceptionClasses;
+package distanceCalculator.exceptionClasses;
 
 public class LatitudeMeasureException extends  Throwable {
     @Override

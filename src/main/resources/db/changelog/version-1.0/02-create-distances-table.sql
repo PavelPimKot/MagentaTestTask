@@ -10,14 +10,14 @@ create table distances(
 GO
 
 alter table distances
-add constraint FROM_CITY
+add constraint fromCity
 foreign key (fromCity)
 references cities(id)
 
 GO
 
 alter table distances
-add constraint TO_CITY
+add constraint toCity
 foreign key (toCity)
 references cities(id)
 
