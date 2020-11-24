@@ -17,7 +17,7 @@ public class MainController {
     private DistanceRepository distanceRepository;
 
 
-    @GetMapping("/page")
+    @GetMapping("/mainPage")
     public String method (){
         return "mainPage";
     }
