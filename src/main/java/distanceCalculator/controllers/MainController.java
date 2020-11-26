@@ -5,7 +5,6 @@ import distanceCalculator.exceptionClasses.LatitudeMeasureException;
 import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
 import distanceCalculator.infoClasses.Distance;
-import distanceCalculator.xmlParser.SAXPars;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +28,11 @@ public class MainController {
         return "mainPage";
     }
 
+    @GetMapping("/calculations")
+    public String calculationsRet (){
+        return "calculations";
+    }
+
     @GetMapping("/calculateDistance")
     public ModelAndView result(
             @RequestParam(value = "firstName") String firstName,
@@ -40,15 +44,13 @@ public class MainController {
     ) throws LatitudeMeasureException, LongitudeMeasureException {
         ModelAndView model = new ModelAndView();
         City fromCity = new City(firstName, Double.parseDouble(firstLat),Double.parseDouble(firstLong));
-        City toCity = new City(firstName, Double.parseDouble(firstLat),Double.parseDouble(firstLong));
+        City toCity = new City(firstName, Double.parseDouble(secondLat),Double.parseDouble(secondLong));
        Distance result =  Distance.getDistanceBetweenStraight(fromCity, toCity);
+       cityRepository.save(fromCity);
+       cityRepository.save(toCity);
        distanceRepository.save(result);
        model.addObject("resultObject", result);
        model.setViewName("resultPage");
        return model;
-    }
-
-    private void parseXML(){
-        SAXPars.parseXML();
     }
 }

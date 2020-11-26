@@ -46,19 +46,17 @@ public class SAXPars {
                 ++distanceCount;
             }
         }
-
-        public static ArrayList<City> getCities() {
-            return cities;
-        }
-
-        public static ArrayList<Distance> getDistances() {
-            return distances;
-        }
+    }
+    public static ArrayList<City> getCities() {
+        return cities;
     }
 
-    public static void parseXML(){
+    public static ArrayList<Distance> getDistances() {
+        return distances;
+    }
+
+    public static void parseXML(File inputFile){
         try {
-            File inputFile = new File("input.txt");
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
             XMLHandler xmlHandler = new XMLHandler();
