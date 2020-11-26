@@ -43,7 +43,7 @@ public class MainController {
         City toCity = new City(firstName, Double.parseDouble(firstLat),Double.parseDouble(firstLong));
        Distance result =  Distance.getDistanceBetweenStraight(fromCity, toCity);
        distanceRepository.save(result);
-       model.addObject("resultObject", result)
+       model.addObject("resultObject", result);
        model.setViewName("resultPage");
        return model;
     }
