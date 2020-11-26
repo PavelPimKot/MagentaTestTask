@@ -24,7 +24,7 @@ public class Distance implements Serializable {
     private double distance;
     private final static double EARTH_RAD = 6371;//km
 
-    private Distance( City fromCity, City toCity, double distance){
+    public Distance( City fromCity, City toCity, double distance){
         this.toCity = toCity;
 
         this.fromCity = fromCity;
