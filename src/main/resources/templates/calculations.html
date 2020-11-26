@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>calculations</title>
+</head>
+<body>
+<form th:action="@{calculateDistance}" method="get">
+    <div>
+        City from:
+        <input type="text" name="firstName" required>
+        <input type="number" name="firstLat" required>
+        <input type="number" name="firstLong" required>
+    </div>
+    <div>
+        City to:
+        <input type="text" name="firstName" required>
+        <input type="number" name="firstLat" required>
+        <input type="number" name="firstLong" required>
+    </div>
+    <div>
+        <button>
+            Найти:
+        </button>
+    </div>
+</form>
+</body>
+</html>
