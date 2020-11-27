@@ -20,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+    private final static int updateFromDb = 0;
+    private static DirectedWeightedMultigraph<Distance, DefaultWeightedEdge> distanceGraph;
 
 
     @Autowired
@@ -36,8 +38,9 @@ public class MainController {
 
     @GetMapping("/calculations")
     public String calculationsRet (){
-        DirectedWeightedMultigraph<Distance, DefaultWeightedEdge> distanceGraph
-                = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        if (updateFromDb == 0) {//заполнение графа(нужно загрузить данные из базы данных в граф)
+            distanceGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        }
         AStarAdmissibleHeuristic<Distance> heuristic = new AStarAdmissibleHeuristic<Distance>() {
             @Override
             public double getCostEstimate(Distance o, Distance v1) {
@@ -48,7 +51,6 @@ public class MainController {
                 = new AStarShortestPath<Distance, DefaultWeightedEdge>(distanceGraph,heuristic);
         Distance sourceVertex = new Distance();
         Distance destinationVertex = new Distance();
-
         aStarShortestPath.getPath(sourceVertex, destinationVertex).getWeight();//ответ
         return "calculations";
     }
