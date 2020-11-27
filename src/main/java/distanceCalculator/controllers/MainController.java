@@ -5,6 +5,11 @@ import distanceCalculator.exceptionClasses.LatitudeMeasureException;
 import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
 import distanceCalculator.infoClasses.Distance;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
+import  org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
+
 
 
     @Autowired
@@ -30,6 +36,20 @@ public class MainController {
 
     @GetMapping("/calculations")
     public String calculationsRet (){
+        DirectedWeightedMultigraph<Distance, DefaultWeightedEdge> distanceGraph
+                = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+        AStarAdmissibleHeuristic<Distance> heuristic = new AStarAdmissibleHeuristic<Distance>() {
+            @Override
+            public double getCostEstimate(Distance o, Distance v1) {
+                return Distance.getDistanceBetweenStraight(o.getFromCity(), v1.getToCity()).getDistance();
+            }
+        };
+        AStarShortestPath<Distance, DefaultWeightedEdge> aStarShortestPath
+                = new AStarShortestPath<Distance, DefaultWeightedEdge>(distanceGraph,heuristic);
+        Distance sourceVertex = new Distance();
+        Distance destinationVertex = new Distance();
+
+        aStarShortestPath.getPath(sourceVertex, destinationVertex).getWeight();//ответ
         return "calculations";
     }
 
