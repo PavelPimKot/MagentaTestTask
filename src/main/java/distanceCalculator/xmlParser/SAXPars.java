@@ -1,4 +1,5 @@
 package distanceCalculator.xmlParser;
+
 import distanceCalculator.exceptionClasses.LatitudeMeasureException;
 import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
@@ -47,6 +48,7 @@ public class SAXPars {
             }
         }
     }
+
     public static ArrayList<City> getCities() {
         return cities;
     }
@@ -55,7 +57,7 @@ public class SAXPars {
         return distances;
     }
 
-    public static void parseXML(File inputFile){
+    public static void parseXML(File inputFile) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();

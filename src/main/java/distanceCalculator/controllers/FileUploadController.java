@@ -27,14 +27,16 @@ public class FileUploadController {
     @Autowired
     private DistanceRepository distanceRepository;
 
-    @RequestMapping(value="/upload", method=RequestMethod.GET)
-    public @ResponseBody String provideUploadInfo() {
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public @ResponseBody
+    String provideUploadInfo() {
         return "Вы можете загружать файл с использованием того же URL.";
     }
 
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
-                                                 @RequestParam("file") MultipartFile file){
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public @ResponseBody
+    String handleFileUpload(@RequestParam("name") String name,
+                            @RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -54,14 +56,14 @@ public class FileUploadController {
         }
     }
 
-    private void parseXML(File inputFile){
+    private void parseXML(File inputFile) {
         SAXPars.parseXML(inputFile);
         ArrayList<City> cities = SAXPars.getCities();
         ArrayList<Distance> distances = SAXPars.getDistances();
         for (City city : cities) {
             cityRepository.save(city);
         }
-        for(Distance distance: distances){
+        for (Distance distance : distances) {
             distanceRepository.save(distance);
         }
     }

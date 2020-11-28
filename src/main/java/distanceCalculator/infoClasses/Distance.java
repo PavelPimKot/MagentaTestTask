@@ -1,4 +1,5 @@
 package distanceCalculator.infoClasses;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -24,7 +25,7 @@ public class Distance implements Serializable {
     private double distance;
     private final static double EARTH_RAD = 6371;//km
 
-    public Distance( City fromCity, City toCity, double distance){
+    public Distance(City fromCity, City toCity, double distance) {
         this.toCity = toCity;
 
         this.fromCity = fromCity;
@@ -32,18 +33,19 @@ public class Distance implements Serializable {
         this.distance = distance;
     }
 
-    public Distance(){}
+    public Distance() {
+    }
 
-    public static Distance getDistanceBetweenStraight(City fromCity, City toCity){
-        double dLat = Math.toRadians(toCity.getLatitude()-fromCity.getLatitude());
-        double dLng = Math.toRadians(toCity.getLongitude()-fromCity.getLongitude());
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    public static Distance getDistanceBetweenStraight(City fromCity, City toCity) {
+        double dLat = Math.toRadians(toCity.getLatitude() - fromCity.getLatitude());
+        double dLng = Math.toRadians(toCity.getLongitude() - fromCity.getLongitude());
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(fromCity.getLatitude())) *
                         Math.cos(Math.toRadians(toCity.getLatitude())) *
-                        Math.sin(dLng/2) * Math.sin(dLng/2);
-        double distance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double distance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         distance *= EARTH_RAD;
-        return new Distance( fromCity, toCity, distance);
+        return new Distance(fromCity, toCity, distance);
     }
 
     public void setFromCity(City fromCity) {
