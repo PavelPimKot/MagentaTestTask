@@ -116,7 +116,7 @@ public class MainController {
                 = new AStarShortestPath<City, DefaultWeightedEdge>(distanceGraph, heuristic);
         try {
             City sourceVertex = new City(firstName, firstLat, firstLong);
-            City destinationVertex = new City(firstName, firstLat, firstLong);
+            City destinationVertex = new City(secondName, secondLat, secondLong);
             for (City city : cities) {
                 if (city.equals(sourceVertex)) {
                     sourceVertex = city;
@@ -184,7 +184,6 @@ public class MainController {
                 cities.add(toCity);
                 cityRepository.save(fromCity);
                 cityRepository.save(toCity);
-                distanceRepository.save(result);
                 distanceGraph.addVertex(fromCity);
                 distanceGraph.addVertex(toCity);
             } else if (firstCityFound && !secondCityFound) {
@@ -197,6 +196,7 @@ public class MainController {
                 distanceGraph.addVertex(fromCity);
             }
             distances.add(result);
+            distanceRepository.save(result);
             DefaultWeightedEdge currEdge = distanceGraph.addEdge(fromCity, toCity);
             distanceGraph.setEdgeWeight(currEdge, result.getDistance());
 
