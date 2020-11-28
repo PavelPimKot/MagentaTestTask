@@ -7,15 +7,15 @@
 <body>
 <table border="1">
     <tr>
-        <td>Name</td>
-        <td>Latitude</td>
-        <td>Longitude</td>
+        <td>From city</td>
+        <td>To city</td>
+        <td>Distance</td>
     </tr>
     <div th:each="num : ${distances}">
         <tr>
-            <td><input type=text readonly th:value="${num.fromCity.toString()}"/></td>
-            <td><input type=text readonly th:value="${num.toCity.toString()}"/></td>
-            <td><input type=text readonly th:value="${num.distance}"/></td>
+            <td width="400"><input size="40" type=text readonly th:value="${num.fromCity.toString()}"/></td>
+            <td width="400"><input size="40" type=text readonly th:value="${num.toCity.toString()}"/></td>
+            <td width="400"><input size="40" type=text readonly th:value="${num.distance}"/></td>
         </tr>
     </div>
 </table>

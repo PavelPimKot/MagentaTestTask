@@ -37,7 +37,7 @@ public class SAXPars {
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if (qName.equals("city")) {
+            if (qName.equals("сity")) {
                 String name = attributes.getValue("name");
                 double latitude = Double.parseDouble(attributes.getValue("latitude"));
                 double longitude = Double.parseDouble(attributes.getValue("longitude"));

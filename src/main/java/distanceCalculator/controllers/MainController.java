@@ -12,7 +12,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import distanceCalculator.repos.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,12 +71,7 @@ public class MainController {
 
     @GetMapping("mainPage")
     public String mainPage() {
-        return "mainPage";
-    }
-
-    @GetMapping("/calculations")
-    public String calculationsRet() {
-        if (updateFromDb == 0) {//заполнение графа(нужно загрузить данные из базы данных в граф)
+        if (updateFromDb == 0) {
             distanceGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
             cities = new ArrayList<City>(cityRepository.findAll());
             distances = new ArrayList<Distance>(distanceRepository.findAll());
@@ -103,6 +97,11 @@ public class MainController {
                 }
             }
         }
+        return "mainPage";
+    }
+
+    @GetMapping("/calculations")
+    public String calculationsRet() {
         return "calculations";
     }
 
@@ -182,7 +181,7 @@ public class MainController {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
-                File inputFile = new File(name + "-uploaded");
+                File inputFile = new File(name);
                 BufferedOutputStream stream =
                         new BufferedOutputStream(new FileOutputStream(inputFile));
                 stream.write(bytes);
@@ -215,6 +214,8 @@ public class MainController {
         ArrayList<City> citiesUpload = SAXPars.getCities();
         ArrayList<Distance> distancesUpload = SAXPars.getDistances();
         cities.addAll(citiesUpload);
+        cityRepository.saveAll(citiesUpload);
         distances.addAll(distancesUpload);
+        distanceRepository.saveAll(distancesUpload);
     }
 }
