@@ -21,7 +21,6 @@
     </properties>
 
 
-
     <dependencies>
 
         <dependency>
@@ -44,7 +43,7 @@
         <dependency>
             <groupId>org.jgrapht</groupId>
             <artifactId>jgrapht-core</artifactId>
-            <version>1.5.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
@@ -108,7 +107,6 @@
                     <propertyFile>${project.basedir}/src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
