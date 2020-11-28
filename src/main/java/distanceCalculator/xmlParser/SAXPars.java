@@ -5,6 +5,7 @@ import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
 import distanceCalculator.infoClasses.Distance;
 import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -18,8 +19,22 @@ public class SAXPars {
     private static ArrayList<City> cities = new ArrayList<>();
     private static ArrayList<Distance> distances = new ArrayList<>();
     private static int distanceCount = -1;
+    private static ArrayList<Integer> mistakePositions;
 
     private static class XMLHandler extends DefaultHandler {
+
+        private Locator locator;
+
+        @Override
+        public void setDocumentLocator(final Locator locator) {
+            this.locator = locator; // Save the locator, so that it can be used later for line tracking when traversing nodes.
+        }
+
+        @Override
+        public void startDocument() throws SAXException {
+            mistakePositions = new ArrayList<Integer>();
+        }
+
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equals("city")) {
@@ -38,7 +53,7 @@ public class SAXPars {
                         distanceCount = -1;
                     }
                 } catch (LatitudeMeasureException | LongitudeMeasureException e) {
-                    e.printStackTrace();
+                    mistakePositions.add(locator.getLineNumber());
                 }
             }
             if (qName.equals("distance")) {
@@ -49,12 +64,17 @@ public class SAXPars {
         }
     }
 
+
     public static ArrayList<City> getCities() {
         return cities;
     }
 
     public static ArrayList<Distance> getDistances() {
         return distances;
+    }
+
+    public static ArrayList<Integer> getMistakePositions() {
+        return mistakePositions;
     }
 
     public static void parseXML(File inputFile) {

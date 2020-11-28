@@ -97,16 +97,21 @@ public class MainController {
             @RequestParam(value = "secondName") String secondName,
             @RequestParam(value = "secondLat") String secondLat,
             @RequestParam(value = "secondLong") String secondLong
-    ) throws LatitudeMeasureException, LongitudeMeasureException {
+    ) {
         ModelAndView model = new ModelAndView();
-        City fromCity = new City(firstName, Double.parseDouble(firstLat), Double.parseDouble(firstLong));
-        City toCity = new City(secondName, Double.parseDouble(secondLat), Double.parseDouble(secondLong));
-        Distance result = Distance.getDistanceBetweenStraight(fromCity, toCity);
-        cityRepository.save(fromCity);
-        cityRepository.save(toCity);
-        distanceRepository.save(result);
-        model.addObject("resultObject", result);
-        model.setViewName("resultPage");
+        try {
+            City fromCity = new City(firstName, Double.parseDouble(firstLat), Double.parseDouble(firstLong));
+            City toCity = new City(secondName, Double.parseDouble(secondLat), Double.parseDouble(secondLong));
+            Distance result = Distance.getDistanceBetweenStraight(fromCity, toCity);
+            cityRepository.save(fromCity);
+            cityRepository.save(toCity);
+            distanceRepository.save(result);
+            model.addObject("resultObject", result);
+            model.setViewName("resultPage");
+        } catch (LatitudeMeasureException | LongitudeMeasureException e) {
+            model.addObject("exception", e.toString());
+            return model;
+        }
         return model;
     }
 }
