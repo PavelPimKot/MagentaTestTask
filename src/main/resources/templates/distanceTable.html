@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>distance table</title>
 </head>
 <body>
-
+<table border="1">
+    <tr>
+        <td>Name</td>
+        <td>Latitude</td>
+        <td>Longitude</td>
+    </tr>
+    <div th:each="num : ${distances}">
+        <tr>
+            <td><input type=text readonly th:value="${num.fromCity.toString()}"/></td>
+            <td><input type=text readonly th:value="${num.toCity.toString()}"/></td>
+            <td><input type=text readonly th:value="${num.distance}"/></td>
+        </tr>
+    </div>
+</table>
 </body>
 </html>

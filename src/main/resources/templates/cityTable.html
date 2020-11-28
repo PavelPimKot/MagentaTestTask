@@ -6,22 +6,40 @@
 </head>
 <body>
 <form th:action="@{/addCity}"
-      th:object="${city}" method="GET">
+      method="GET">
     <table>
         <tr>
             <td>Name:</td>
-            <td><input type="text" th:field="*{name}"/></td>
+            <td><input type="text"  name = "name"/></td>
         </tr>
         <tr>
             <td> Latitude:</td>
-            <td> <input type="text" th:field="*{latitude}"/></td>
+            <td> <input type="number" name = "latitude"/></td>
         </tr>
         <tr>
             <td> Longitude:</td>
-            <td><input type="number" th:field="*{longitude}"/></td>
+            <td><input type="number" name = "longitude"/></td>
         </tr>
     </table>
     <input type="submit" value="Create"/>
 </form>
+<br>
+<br>
+<br>
+<br>
+<table border="1">
+    <tr>
+        <td>Name</td>
+        <td>Latitude</td>
+        <td>Longitude</td>
+    </tr>
+    <div th:each="num : ${cities}">
+        <tr>
+            <td><input type=text readonly th:value="${num.name}"/></td>
+            <td><input type=text readonly th:value="${num.latitude}"/></td>
+            <td><input type=text readonly th:value="${num.longitude}"/></td>
+        </tr>
+    </div>
+</table>
 </body>
 </html>

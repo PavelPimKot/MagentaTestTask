@@ -12,6 +12,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import distanceCalculator.repos.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,9 +40,12 @@ public class MainController {
     private DistanceRepository distanceRepository;
 
     @GetMapping("addCity")
-    public String saveBook(@ModelAttribute("city") City city) {
+    public String saveBook(@RequestParam(value = "name") String name,
+                           @RequestParam(value = "latitude") double latitude,
+                           @RequestParam(value = "longitude") double longitude) {
         try {
-            City toSave = new City(city.getName(), city.getLatitude(), city.getLongitude());
+            City toSave = new City(name, latitude, longitude);
+            cities.add(toSave);
             cityRepository.save(toSave);
             return "redirect:/cityTable";
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
@@ -51,13 +55,19 @@ public class MainController {
     }
 
     @GetMapping("cityTable")
-    public String cityTable() {
-        return "cityTable";
+    public ModelAndView cityTable() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("cities", cities);
+        model.setViewName("cityTable");
+        return model;
     }
 
     @GetMapping("distanceTable")
-    public String distanceTable() {
-        return "distanceTable";
+    public ModelAndView distanceTable() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("distances", distances);
+        model.setViewName("distanceTable");
+        return model;
     }
 
     @GetMapping("mainPage")
@@ -113,9 +123,11 @@ public class MainController {
         for (City city : cities) {
             if (city.getName().equals(firstName)) {
                 sourceVertex = city;
+                continue;
             }
             if (city.getName().equals(secondName)) {
                 destinationVertex = city;
+                continue;
             }
             if (sourceVertex != null && destinationVertex != null)
                 break;
@@ -130,20 +142,28 @@ public class MainController {
     @GetMapping("/calculateDistance")
     public ModelAndView result(
             @RequestParam(value = "firstName") String firstName,
-            @RequestParam(value = "firstLat") String firstLat,
-            @RequestParam(value = "firstLong") String firstLong,
+            @RequestParam(value = "firstLat") double firstLat,
+            @RequestParam(value = "firstLong") double firstLong,
             @RequestParam(value = "secondName") String secondName,
-            @RequestParam(value = "secondLat") String secondLat,
-            @RequestParam(value = "secondLong") String secondLong
+            @RequestParam(value = "secondLat") double secondLat,
+            @RequestParam(value = "secondLong") double secondLong
     ) {
         ModelAndView model = new ModelAndView();
         try {
-            City fromCity = new City(firstName, Double.parseDouble(firstLat), Double.parseDouble(firstLong));
-            City toCity = new City(secondName, Double.parseDouble(secondLat), Double.parseDouble(secondLong));
+
+            City fromCity = new City(firstName, firstLat, firstLong);
+            City toCity = new City(secondName, secondLat, secondLong);
             Distance result = Distance.getDistanceBetweenStraight(fromCity, toCity);
+            cities.add(fromCity);
+            cities.add(toCity);
+            distances.add(result);
             cityRepository.save(fromCity);
             cityRepository.save(toCity);
             distanceRepository.save(result);
+            distanceGraph.addVertex(fromCity);
+            distanceGraph.addVertex(toCity);
+            DefaultWeightedEdge currEdge = distanceGraph.addEdge(fromCity, toCity);
+            distanceGraph.setEdgeWeight(currEdge, result.getDistance());
             model.addObject("resultWeight", Double.valueOf(result.getDistance()));
             model.setViewName("resultPage");
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
@@ -192,13 +212,9 @@ public class MainController {
 
     private void parseXML(File inputFile) {
         SAXPars.parseXML(inputFile);
-        ArrayList<City> cities = SAXPars.getCities();
-        ArrayList<Distance> distances = SAXPars.getDistances();
-        for (City city : cities) {
-            cityRepository.save(city);
-        }
-        for (Distance distance : distances) {
-            distanceRepository.save(distance);
-        }
+        ArrayList<City> citiesUpload = SAXPars.getCities();
+        ArrayList<Distance> distancesUpload = SAXPars.getDistances();
+        cities.addAll(citiesUpload);
+        distances.addAll(distancesUpload);
     }
 }
