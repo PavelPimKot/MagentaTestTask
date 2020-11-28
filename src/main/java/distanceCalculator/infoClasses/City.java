@@ -2,6 +2,7 @@ package distanceCalculator.infoClasses;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 import distanceCalculator.exceptionClasses.*;
 
@@ -67,5 +68,20 @@ public class City implements Serializable {
     @Override
     public String toString() {
         return name + '(' + " Latitude:" + latitude + '°' + " , " + " Longitude:" + longitude + '°' + ')';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        City city = (City) o;
+        return Double.compare(city.latitude, latitude) == 0 &&
+                Double.compare(city.longitude, longitude) == 0 &&
+                Objects.equals(name, city.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, latitude, longitude);
     }
 }

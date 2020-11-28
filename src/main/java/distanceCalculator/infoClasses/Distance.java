@@ -2,6 +2,7 @@ package distanceCalculator.infoClasses;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "distances")
@@ -75,5 +76,20 @@ public class Distance implements Serializable {
                 ", toCity=" + toCity +
                 ", distance=" + distance +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Distance distance1 = (Distance) o;
+        return Double.compare(distance1.distance, distance) == 0 &&
+                Objects.equals(fromCity, distance1.fromCity) &&
+                Objects.equals(toCity, distance1.toCity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fromCity, toCity, distance);
     }
 }
