@@ -5,6 +5,7 @@ import distanceCalculator.exceptionClasses.LatitudeMeasureException;
 import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
 import distanceCalculator.infoClasses.Distance;
+import distanceCalculator.xmlParser.SAXPars;
 import org.jgrapht.alg.interfaces.*;
 import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -13,8 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import distanceCalculator.repos.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 
@@ -24,6 +29,7 @@ public class MainController {
     private final static int updateFromDb = 0;
     private static DirectedWeightedMultigraph<City, DefaultWeightedEdge> distanceGraph;
     private static ArrayList<City> cities;
+    private static ArrayList<Distance> distances;
 
 
     @Autowired
@@ -64,6 +70,7 @@ public class MainController {
         if (updateFromDb == 0) {//заполнение графа(нужно загрузить данные из базы данных в граф)
             distanceGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
             cities = new ArrayList<City>(cityRepository.findAll());
+            distances = new ArrayList<Distance>(distanceRepository.findAll());
             if (cities.isEmpty()) {
 
             } else {
@@ -144,5 +151,54 @@ public class MainController {
             return model;
         }
         return model;
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public @ResponseBody
+    ModelAndView handleFileUpload(@RequestParam("name") String name,
+                                  @RequestParam("file") MultipartFile file) {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("resultPage");
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                File inputFile = new File(name + "-uploaded");
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(inputFile));
+                stream.write(bytes);
+                stream.close();
+                parseXML(inputFile);
+                if (SAXPars.getMistakePositions().isEmpty()) {
+                    model.addObject("resultWeight",
+                            "Вы удачно загрузили " + name + " в " + name + "-uploaded !");
+                } else {
+                    model.addObject("resultWeight",
+                            "Вы удачно загрузили " + name + " в " + name + "-uploaded !" + " количество ошибок : "
+                                    + SAXPars.getMistakePositions().size());
+                }
+                return model;
+
+            } catch (Exception e) {
+                model.addObject("resultWeight",
+                        "Вам не удалось загрузить " + name + " => " + e.getMessage());
+                return model;
+            }
+        } else {
+            model.addObject("resultWeight",
+                    "Вам не удалось загрузить " + name + " потому что файл пустой.");
+            return model;
+        }
+    }
+
+    private void parseXML(File inputFile) {
+        SAXPars.parseXML(inputFile);
+        ArrayList<City> cities = SAXPars.getCities();
+        ArrayList<Distance> distances = SAXPars.getDistances();
+        for (City city : cities) {
+            cityRepository.save(city);
+        }
+        for (Distance distance : distances) {
+            distanceRepository.save(distance);
+        }
     }
 }
