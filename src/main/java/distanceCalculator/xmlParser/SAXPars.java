@@ -47,10 +47,11 @@ public class SAXPars {
                     if (distanceCount == 0) {
                         distances.get(distances.size() - 1).setFromCity(toAdd);
                         ++distanceCount;
-                    }
-                    if (distanceCount == 1) {
-                        distances.get(distances.size() - 1).setToCity(toAdd);
-                        distanceCount = -1;
+                    }else {
+                        if (distanceCount == 1) {
+                            distances.get(distances.size() - 1).setToCity(toAdd);
+                            distanceCount = -1;
+                        }
                     }
                 } catch (LatitudeMeasureException | LongitudeMeasureException e) {
                     mistakePositions.add(locator.getLineNumber());
