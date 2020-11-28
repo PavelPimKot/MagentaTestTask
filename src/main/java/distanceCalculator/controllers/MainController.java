@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import distanceCalculator.repos.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.util.ArrayList;
 
 
@@ -22,6 +23,7 @@ public class MainController {
 
     private final static int updateFromDb = 0;
     private static DirectedWeightedMultigraph<City, DefaultWeightedEdge> distanceGraph;
+    private static ArrayList<City> cities;
 
 
     @Autowired
@@ -30,11 +32,38 @@ public class MainController {
     @Autowired
     private DistanceRepository distanceRepository;
 
+    @GetMapping("addCity")
+    public String saveBook(@ModelAttribute("city") City city) {
+        try {
+            City toSave = new City(city.getName(), city.getLatitude(), city.getLongitude());
+            cityRepository.save(toSave);
+            return "redirect:/cityTable";
+        } catch (LatitudeMeasureException | LongitudeMeasureException e) {
+            //Do something
+        }
+        return "redirect:/cityTable";
+    }
+
+    @GetMapping("cityTable")
+    public String cityTable() {
+        return "cityTable";
+    }
+
+    @GetMapping("distanceTable")
+    public String distanceTable() {
+        return "distanceTable";
+    }
+
+    @GetMapping("mainPage")
+    public String mainPage() {
+        return "mainPage";
+    }
+
     @GetMapping("/calculations")
     public String calculationsRet() {
         if (updateFromDb == 0) {//заполнение графа(нужно загрузить данные из базы данных в граф)
             distanceGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
-            ArrayList<City> cities = new ArrayList<City>(cityRepository.findAll());
+            cities = new ArrayList<City>(cityRepository.findAll());
             if (cities.isEmpty()) {
 
             } else {
@@ -72,8 +101,18 @@ public class MainController {
         };
         AStarShortestPath<City, DefaultWeightedEdge> aStarShortestPath
                 = new AStarShortestPath<City, DefaultWeightedEdge>(distanceGraph, heuristic);
-        City sourceVertex = cityRepository.findByName(firstName);
-        City destinationVertex = cityRepository.findByName(secondName);
+        City sourceVertex = null;
+        City destinationVertex = null;
+        for (City city : cities) {
+            if (city.getName().equals(firstName)) {
+                sourceVertex = city;
+            }
+            if (city.getName().equals(secondName)) {
+                destinationVertex = city;
+            }
+            if (sourceVertex != null && destinationVertex != null)
+                break;
+        }
         double resultWeight = aStarShortestPath.getPath(sourceVertex, destinationVertex).getWeight();//ответ
         model.addObject("resultWeight", Double.valueOf(resultWeight));
         model.setViewName("resultPage");

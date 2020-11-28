@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cityTable</title>
+</head>
+<body>
+<form th:action="@{/addCity}"
+      th:object="${city}" method="GET">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{name}"/></td>
+        </tr>
+        <tr>
+            <td> Latitude:</td>
+            <td> <input type="text" th:field="*{latitude}"/></td>
+        </tr>
+        <tr>
+            <td> Longitude:</td>
+            <td><input type="number" th:field="*{longitude}"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="Create"/>
+</form>
+</body>
+</html>

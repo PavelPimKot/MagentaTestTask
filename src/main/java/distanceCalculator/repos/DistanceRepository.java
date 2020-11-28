@@ -9,4 +9,6 @@ import java.util.Set;
 
 public interface DistanceRepository extends CrudRepository<Distance, Integer> {
     List<Distance> findAllByFromCity(City fromCity);
+
+    List<Distance> findAll();
 }
