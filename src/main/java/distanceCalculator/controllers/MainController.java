@@ -22,13 +22,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-
+/**
+ * @author PavelPimkot
+ * @version 1.0
+ * The main controller class in project
+ * Handles all events on the web
+ */
 @Controller
 public class MainController {
 
     private final static int updateFromDb = 0;
+    /**
+     * This field is used to solve the distance Matrix calculation
+     */
     private static DirectedWeightedMultigraph<City, DefaultWeightedEdge> distanceGraph;
+    /**
+     * This field is used to keep all cities while program is working
+     */
     private static ArrayList<City> cities;
+    /**
+     * This field is used to keep all distances while program is working
+     */
     private static ArrayList<Distance> distances;
 
 
@@ -38,13 +52,27 @@ public class MainController {
     @Autowired
     private DistanceRepository distanceRepository;
 
+    /**
+     * This method is used to work with addCity response
+     * If we have not got such city in our cities
+     * we add it into ArrayList, save to database and add into graph as edge
+     * If we already have got such city, or if city is incorrect
+     * we drop a message about exception
+     */
     @GetMapping("addCity")
-    public ModelAndView saveBook(@RequestParam(value = "name") String name,
-                           @RequestParam(value = "latitude") double latitude,
-                           @RequestParam(value = "longitude") double longitude) {
+    public ModelAndView saveCity(@RequestParam(value = "name") String name,
+                                 @RequestParam(value = "latitude") double latitude,
+                                 @RequestParam(value = "longitude") double longitude) {
         ModelAndView model = new ModelAndView();
         try {
             City toSave = new City(name, latitude, longitude);
+            for (City city : cities) {
+                if (city.equals(toSave)) {
+                    model.addObject("resultWeight", "Such city is already exists");
+                    model.setViewName("resultPage");
+                    return model;
+                }
+            }
             cities.add(toSave);
             distanceGraph.addVertex(toSave);
             cityRepository.save(toSave);
@@ -57,6 +85,10 @@ public class MainController {
         }
     }
 
+    /**
+     * This method is used to show cities as table at view
+     * We put it into the model, then show it using thymeleaf
+     */
     @GetMapping("cityTable")
     public ModelAndView cityTable() {
         ModelAndView model = new ModelAndView();
@@ -65,6 +97,10 @@ public class MainController {
         return model;
     }
 
+    /**
+     * This method is used to show distances as table at view
+     * We put it into the model, then show it using thymeleaf
+     */
     @GetMapping("distanceTable")
     public ModelAndView distanceTable() {
         ModelAndView model = new ModelAndView();
@@ -73,6 +109,11 @@ public class MainController {
         return model;
     }
 
+    /**
+     * This method is used to download information from database when the program starts
+     * It download info into graph and Lists of cities and distances
+     * Also it used to show mainPage which has links to other pages
+     */
     @GetMapping("mainPage")
     public String mainPage() {
         if (updateFromDb == 0) {
@@ -100,6 +141,10 @@ public class MainController {
         return "calculations";
     }
 
+    /**
+     * This method calculates the distance the distance between two cities using the AStar graph algorithm
+     * It doesnt do it, if it is no such cities in database
+     */
     @GetMapping("graphDistanceCalculation")
     public ModelAndView graphDistanceCalculation(@RequestParam(value = "firstName") String firstName,
                                                  @RequestParam(value = "firstLat") double firstLat,
@@ -150,6 +195,9 @@ public class MainController {
 
     }
 
+    /**
+     * This method does straight distance calculation
+     */
     @GetMapping("/calculateDistance")
     public ModelAndView result(
             @RequestParam(value = "firstName") String firstName,
@@ -215,6 +263,9 @@ public class MainController {
         return model;
     }
 
+    /**
+     * This method downloads the file and parses it
+     */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody
     ModelAndView handleFileUpload(@RequestParam("name") String name,
@@ -252,6 +303,9 @@ public class MainController {
         }
     }
 
+    /**
+     * This method parses info from file and add the info into the graph and lists
+     */
     private void parseXML(File inputFile) {
         SAXPars.parseXML(inputFile);
         ArrayList<City> citiesUpload = SAXPars.getCities();
@@ -263,7 +317,7 @@ public class MainController {
         for (City city : citiesUpload) {
             distanceGraph.addVertex(city);
         }
-        for(Distance distance : distancesUpload){
+        for (Distance distance : distancesUpload) {
             DefaultWeightedEdge currEdge = distanceGraph.addEdge(distance.getFromCity(), distance.getToCity());
             distanceGraph.setEdgeWeight(currEdge, distance.getDistance());
         }

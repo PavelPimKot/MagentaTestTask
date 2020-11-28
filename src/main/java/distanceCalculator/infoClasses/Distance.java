@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * @author PavelPimkot
+ * @version 1.0
+ * Class which realizes distance between cities in my project
+ */
 @Entity
 @Table(name = "distances")
 public class Distance implements Serializable {
@@ -37,6 +42,9 @@ public class Distance implements Serializable {
     public Distance() {
     }
 
+    /**
+     * This function calculates the distance between two cities using the circular arc formula
+     */
     public static Distance getDistanceBetweenStraight(City fromCity, City toCity) {
         double dLat = Math.toRadians(toCity.getLatitude() - fromCity.getLatitude());
         double dLng = Math.toRadians(toCity.getLongitude() - fromCity.getLongitude());
