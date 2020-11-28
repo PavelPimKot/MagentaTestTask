@@ -39,19 +39,22 @@ public class MainController {
     private DistanceRepository distanceRepository;
 
     @GetMapping("addCity")
-    public String saveBook(@RequestParam(value = "name") String name,
+    public ModelAndView saveBook(@RequestParam(value = "name") String name,
                            @RequestParam(value = "latitude") double latitude,
                            @RequestParam(value = "longitude") double longitude) {
+        ModelAndView model = new ModelAndView();
         try {
             City toSave = new City(name, latitude, longitude);
             cities.add(toSave);
             distanceGraph.addVertex(toSave);
             cityRepository.save(toSave);
-            return "redirect:/cityTable";
+            model.setViewName("redirect:/cityTable");
+            return model;
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
-            //Do something
+            model.addObject("resultWeight", e.toString());
+            model.setViewName("resultPage");
+            return model;
         }
-        return "redirect:/cityTable";
     }
 
     @GetMapping("cityTable")
@@ -130,13 +133,17 @@ public class MainController {
                     break;
             }
             if (found < 2) {
-
+                model.addObject("resultWeight", "No such information in DB Exception");
+                model.setViewName("resultPage");
+                return model;
             } else {
                 Double resultWeight = aStarShortestPath.getPath(sourceVertex, destinationVertex).getWeight();//ответ
                 model.addObject("resultWeight", resultWeight);
             }
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
-
+            model.addObject("resultWeight", e.toString());
+            model.setViewName("resultPage");
+            return model;
         }
         model.setViewName("resultPage");
         return model;
@@ -201,7 +208,8 @@ public class MainController {
             distanceGraph.setEdgeWeight(currEdge, result.getDistance());
 
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
-            model.addObject("exception", e.toString());
+            model.addObject("resultWeight", e.toString());
+            model.setViewName("resultPage");
             return model;
         }
         return model;
