@@ -5,15 +5,17 @@ import distanceCalculator.exceptionClasses.LatitudeMeasureException;
 import distanceCalculator.exceptionClasses.LongitudeMeasureException;
 import distanceCalculator.infoClasses.City;
 import distanceCalculator.infoClasses.Distance;
-import org.jgrapht.alg.interfaces.*;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import distanceCalculator.repos.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.util.ArrayList;
 
 
