@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileUploadController {
@@ -27,16 +28,13 @@ public class FileUploadController {
     @Autowired
     private DistanceRepository distanceRepository;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public @ResponseBody
-    String provideUploadInfo() {
-        return "Вы можете загружать файл с использованием того же URL.";
-    }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody
-    String handleFileUpload(@RequestParam("name") String name,
-                            @RequestParam("file") MultipartFile file) {
+    ModelAndView handleFileUpload(@RequestParam("name") String name,
+                                  @RequestParam("file") MultipartFile file) {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("resultPage");
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -46,13 +44,25 @@ public class FileUploadController {
                 stream.write(bytes);
                 stream.close();
                 parseXML(inputFile);
-                return "Вы удачно загрузили " + name + " в " + name + "-uploaded !";
+                if (SAXPars.getMistakePositions().isEmpty()) {
+                    model.addObject("resultWeight",
+                            "Вы удачно загрузили " + name + " в " + name + "-uploaded !");
+                } else {
+                    model.addObject("resultWeight",
+                            "Вы удачно загрузили " + name + " в " + name + "-uploaded !" + " количество ошибок : "
+                                    + SAXPars.getMistakePositions().size());
+                }
+                return model;
 
             } catch (Exception e) {
-                return "Вам не удалось загрузить " + name + " => " + e.getMessage();
+                model.addObject("resultWeight",
+                        "Вам не удалось загрузить " + name + " => " + e.getMessage());
+                return model;
             }
         } else {
-            return "Вам не удалось загрузить " + name + " потому что файл пустой.";
+            model.addObject("resultWeight",
+                    "Вам не удалось загрузить " + name + " потому что файл пустой.");
+            return model;
         }
     }
 

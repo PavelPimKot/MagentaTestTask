@@ -32,12 +32,6 @@ public class MainController {
     @Autowired
     private DistanceRepository distanceRepository;
 
-
-    @GetMapping("/mainPage")
-    public String method() {
-        return "mainPage";
-    }
-
     @GetMapping("/calculations")
     public String calculationsRet() {
         if (updateFromDb == 0) {//заполнение графа(нужно загрузить данные из базы данных в граф)
@@ -83,8 +77,8 @@ public class MainController {
         City sourceVertex = cityRepository.findByName(firstName);
         City destinationVertex = cityRepository.findByName(secondName);
         double resultWeight = aStarShortestPath.getPath(sourceVertex, destinationVertex).getWeight();//ответ
-        model.addObject("resultWeight", resultWeight);
-        model.setViewName("resultWeightPage");
+        model.addObject("resultWeight", Double.valueOf(resultWeight));
+        model.setViewName("resultPage");
         return model;
 
     }
@@ -106,7 +100,7 @@ public class MainController {
             cityRepository.save(fromCity);
             cityRepository.save(toCity);
             distanceRepository.save(result);
-            model.addObject("resultObject", result);
+            model.addObject("resultWeight", Double.valueOf(result.getDistance()));
             model.setViewName("resultPage");
         } catch (LatitudeMeasureException | LongitudeMeasureException e) {
             model.addObject("exception", e.toString());
