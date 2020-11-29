@@ -195,11 +195,9 @@ public class MainController {
 
     }
 
-    /**
-     * This method does straight distance calculation
-     */
+
     @GetMapping("/calculateDistance")
-    public ModelAndView result(
+    public ModelAndView straightDistanceCalculation(
             @RequestParam(value = "firstName") String firstName,
             @RequestParam(value = "firstLat") double firstLat,
             @RequestParam(value = "firstLong") double firstLong,
